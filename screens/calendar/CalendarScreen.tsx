@@ -1,21 +1,21 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import CustomSafeAreaView from "../../components/CustomSafeAreaView";
+import CalendarSection from "./components/CalendarSection";
 
 export default function CalendarScreen() {
   return (
     <CustomSafeAreaView>
-      <View style={styles.container}>
-        <Text>Home</Text>
-      </View>
+      <ScrollView style={styles.container}>
+        {/* 달력 */}
+        <CalendarSection />
+      </ScrollView>
     </CustomSafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    paddingHorizontal: 10,
   },
 });
