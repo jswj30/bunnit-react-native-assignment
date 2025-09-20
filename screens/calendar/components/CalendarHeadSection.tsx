@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction, useCallback } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -27,30 +26,14 @@ export default function CalendarHeadSection({
   PADDING,
   HEIGHT,
   selectedMonth,
-  setSelectedMonth,
+  onPressArrowIcon,
 }: {
   PADDING: number;
   HEIGHT: number;
   selectedMonth: Date;
-  setSelectedMonth: Dispatch<SetStateAction<Date>>;
+  onPressArrowIcon: (type: "prev" | "next") => void;
 }) {
   const { width } = useWindowDimensions();
-
-  const onPressArrowIcon = useCallback((type: "prev" | "next") => {
-    setSelectedMonth((prev) => {
-      const newMonth = new Date(prev);
-
-      if (type === "prev") {
-        newMonth.setMonth(newMonth.getMonth() - 1);
-      }
-
-      if (type === "next") {
-        newMonth.setMonth(newMonth.getMonth() + 1);
-      }
-
-      return newMonth;
-    });
-  }, []);
 
   return (
     <View style={styles.container}>

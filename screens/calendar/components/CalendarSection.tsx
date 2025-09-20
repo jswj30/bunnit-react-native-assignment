@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { useDateList } from "../../../hooks/useDateList";
 import CalendarHeadSection from "./CalendarHeadSection";
@@ -10,6 +11,22 @@ const PADDING = 20;
 export default function CalendarSection() {
   const { selectedMonth, setSelectedMonth, dateList } = useDateList();
 
+  const onPressArrowIcon = useCallback((type: "prev" | "next") => {
+    setSelectedMonth((prev) => {
+      const newMonth = new Date(prev);
+
+      if (type === "prev") {
+        newMonth.setMonth(newMonth.getMonth() - 1);
+      }
+
+      if (type === "next") {
+        newMonth.setMonth(newMonth.getMonth() + 1);
+      }
+
+      return newMonth;
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* Year, Month, Icon */}
@@ -17,7 +34,7 @@ export default function CalendarSection() {
         PADDING={PADDING}
         HEIGHT={HEIGHT}
         selectedMonth={selectedMonth}
-        setSelectedMonth={setSelectedMonth}
+        onPressArrowIcon={onPressArrowIcon}
       />
       {/* Week text */}
       <CalendarWeekSection PADDING={PADDING} HEIGHT={HEIGHT} />
