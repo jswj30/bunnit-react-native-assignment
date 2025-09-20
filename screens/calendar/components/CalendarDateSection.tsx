@@ -1,17 +1,17 @@
 import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
-import { useDateList } from "../../../hooks/useDateList";
 
 export default function CalendarDateSection({
   PADDING,
   HEIGHT,
+  selectedMonth,
+  dateList,
 }: {
   PADDING: number;
   HEIGHT: number;
+  selectedMonth: Date;
+  dateList: Date[][];
 }) {
   const { width } = useWindowDimensions();
-
-  // 선택한 월, 일
-  const { selectedMonth, dateList } = useDateList();
 
   return (
     <View>

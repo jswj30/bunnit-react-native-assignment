@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction, useCallback } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -5,7 +6,6 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { useDateList } from "../../../hooks/useDateList";
 import Entypo from "@expo/vector-icons/Entypo";
 
 const MONTH_LIST = [
@@ -26,14 +26,31 @@ const MONTH_LIST = [
 export default function CalendarHeadSection({
   PADDING,
   HEIGHT,
+  selectedMonth,
+  setSelectedMonth,
 }: {
   PADDING: number;
   HEIGHT: number;
+  selectedMonth: Date;
+  setSelectedMonth: Dispatch<SetStateAction<Date>>;
 }) {
   const { width } = useWindowDimensions();
 
-  // 선택한 연, 월
-  const { selectedMonth } = useDateList();
+  const onPressArrowIcon = useCallback((type: "prev" | "next") => {
+    setSelectedMonth((prev) => {
+      const newMonth = new Date(prev);
+
+      if (type === "prev") {
+        newMonth.setMonth(newMonth.getMonth() - 1);
+      }
+
+      if (type === "next") {
+        newMonth.setMonth(newMonth.getMonth() + 1);
+      }
+
+      return newMonth;
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -42,6 +59,7 @@ export default function CalendarHeadSection({
           styles.arrowIcon,
           { width: (width - PADDING) / 7, height: HEIGHT },
         ]}
+        onPress={() => onPressArrowIcon("prev")}
       >
         <Entypo name="chevron-small-left" size={30} color="#29B5BF" />
       </Pressable>
@@ -57,6 +75,7 @@ export default function CalendarHeadSection({
           styles.arrowIcon,
           { width: (width - PADDING) / 7, height: HEIGHT },
         ]}
+        onPress={() => onPressArrowIcon("next")}
       >
         <Entypo name="chevron-small-right" size={30} color="#29B5BF" />
       </Pressable>
