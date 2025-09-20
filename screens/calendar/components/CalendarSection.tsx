@@ -9,7 +9,13 @@ const HEIGHT = 46;
 const PADDING = 20;
 
 export default function CalendarSection() {
-  const { selectedMonth, setSelectedMonth, dateList } = useDateList();
+  const {
+    selectedMonth,
+    setSelectedMonth,
+    selectedDate,
+    setSelectedDate,
+    dateList,
+  } = useDateList();
 
   const onPressArrowIcon = useCallback((type: "prev" | "next") => {
     setSelectedMonth((prev) => {
@@ -44,6 +50,8 @@ export default function CalendarSection() {
         HEIGHT={HEIGHT}
         selectedMonth={selectedMonth}
         dateList={dateList}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
       />
     </View>
   );

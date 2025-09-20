@@ -1,17 +1,33 @@
-import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { Dispatch, SetStateAction, useCallback } from "react";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import { returnIsToday } from "../../../modules/commonModules";
 
 export default function CalendarDateSection({
   PADDING,
   HEIGHT,
   selectedMonth,
   dateList,
+  selectedDate,
+  setSelectedDate,
 }: {
   PADDING: number;
   HEIGHT: number;
   selectedMonth: Date;
   dateList: Date[][];
+  selectedDate: Date | null;
+  setSelectedDate: Dispatch<SetStateAction<Date | null>>;
 }) {
   const { width } = useWindowDimensions();
+
+  const onPressDate = useCallback((date: Date) => {
+    setSelectedDate(date);
+  }, []);
 
   return (
     <View>
@@ -19,7 +35,7 @@ export default function CalendarDateSection({
         return (
           <View key={`list-${index}`} style={styles.dateSection}>
             {list.map((date) => (
-              <View
+              <Pressable
                 key={`${date.getMonth() + 1}-${date.getDate()}`}
                 style={[
                   styles.date,
@@ -28,25 +44,28 @@ export default function CalendarDateSection({
                     height: HEIGHT,
                   },
                 ]}
+                onPress={() => onPressDate(date)}
               >
-                {`${new Date().getMonth() + 1}-${new Date().getDate()}` ===
-                `${date.getMonth() + 1}-${date.getDate()}` ? (
-                  <View style={styles.today}>
-                    <Text style={styles.todayText}>{date.getDate()}</Text>
-                  </View>
-                ) : (
+                <View
+                  style={
+                    selectedDate &&
+                    returnIsToday(selectedDate, date) &&
+                    styles.selected
+                  }
+                >
                   <Text
                     style={[
                       styles.dateText,
                       date.getMonth() !== selectedMonth.getMonth() && {
                         color: "#E7E7E7",
                       },
+                      returnIsToday(new Date(), date) && styles.todayText,
                     ]}
                   >
                     {date.getDate()}
                   </Text>
-                )}
-              </View>
+                </View>
+              </Pressable>
             ))}
           </View>
         );
@@ -68,7 +87,7 @@ const styles = StyleSheet.create({
     color: "#5D5D5D",
     fontSize: 16,
   },
-  today: {
+  selected: {
     width: 30,
     height: 30,
     borderWidth: 1,
@@ -79,7 +98,6 @@ const styles = StyleSheet.create({
   },
   todayText: {
     color: "#374245",
-    fontSize: 16,
     fontWeight: 700,
   },
 });

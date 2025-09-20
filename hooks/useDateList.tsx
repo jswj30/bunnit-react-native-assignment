@@ -3,6 +3,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export const useDateList = () => {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [dateList, setDateList] = useState<Date[][]>([]);
 
   // 선택한 월(selectedMonth)의 전체 일 가져오기
@@ -65,6 +66,8 @@ export const useDateList = () => {
   return {
     selectedMonth,
     setSelectedMonth,
+    selectedDate,
+    setSelectedDate,
     dateList,
   };
 };
