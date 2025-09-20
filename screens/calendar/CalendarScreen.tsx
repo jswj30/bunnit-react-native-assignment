@@ -1,17 +1,19 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import CustomSafeAreaView from "../../components/CustomSafeAreaView";
 
 export default function CalendarScreen() {
   return (
-    <View style={styles.container}>
-      <Text>Calendar</Text>
-    </View>
+    <CustomSafeAreaView>
+      <View style={styles.container}>
+        <Text>Home</Text>
+      </View>
+    </CustomSafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

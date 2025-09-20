@@ -1,17 +1,19 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import CustomSafeAreaView from "../../components/CustomSafeAreaView";
 
 export default function LibraryScreen() {
   return (
-    <View style={styles.container}>
-      <Text>Library</Text>
-    </View>
+    <CustomSafeAreaView>
+      <View style={styles.container}>
+        <Text>Library</Text>
+      </View>
+    </CustomSafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
