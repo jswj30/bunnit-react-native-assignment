@@ -45,7 +45,7 @@ const screenOptions = ({
 
 export default function BottomTabNavigation() {
   return (
-    <Tab.Navigator screenOptions={screenOptions}>
+    <Tab.Navigator screenOptions={screenOptions} initialRouteName="Calendar">
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Calendar" component={CalendarScreen} />
       <Tab.Screen name="Library" component={LibraryScreen} />
