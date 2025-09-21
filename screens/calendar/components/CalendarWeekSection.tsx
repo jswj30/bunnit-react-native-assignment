@@ -1,4 +1,5 @@
 import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { defaultColor } from "../../../modules/defaultColor";
 
 const WEEK_LIST = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -24,8 +25,8 @@ export default function CalendarWeekSection({
           <Text
             style={[
               styles.weekText,
-              week === "Sun" && { color: "#B8696B" },
-              week === "Sat" && { color: "#7FA9D0" },
+              week === "Sun" && { color: defaultColor.red },
+              week === "Sat" && { color: defaultColor.blue },
             ]}
           >
             {week}
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   weekText: {
-    color: "#C6C8CB",
+    color: defaultColor.gray,
     fontSize: 12,
   },
 });

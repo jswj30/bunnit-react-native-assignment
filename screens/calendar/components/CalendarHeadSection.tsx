@@ -6,6 +6,7 @@ import {
   View,
 } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
+import { defaultColor } from "../../../modules/defaultColor";
 
 const MONTH_LIST = [
   "January",
@@ -44,7 +45,7 @@ export default function CalendarHeadSection({
         ]}
         onPress={() => onPressArrowIcon("prev")}
       >
-        <Entypo name="chevron-small-left" size={30} color="#29B5BF" />
+        <Entypo name="chevron-small-left" size={30} color={defaultColor.teal} />
       </Pressable>
 
       <Text style={styles.yearAndMonth}>
@@ -60,7 +61,11 @@ export default function CalendarHeadSection({
         ]}
         onPress={() => onPressArrowIcon("next")}
       >
-        <Entypo name="chevron-small-right" size={30} color="#29B5BF" />
+        <Entypo
+          name="chevron-small-right"
+          size={30}
+          color={defaultColor.teal}
+        />
       </Pressable>
     </View>
   );
@@ -75,7 +80,7 @@ const styles = StyleSheet.create({
   yearAndMonth: {
     flex: 1,
     textAlign: "center",
-    color: "black",
+    color: defaultColor.black,
     fontSize: 20,
     fontWeight: 500,
   },

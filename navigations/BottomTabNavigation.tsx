@@ -7,6 +7,7 @@ import MyPageScreen from "../screens/myPage/MyPageScreen";
 import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { defaultColor } from "../modules/defaultColor";
 
 export type BottomTabParamList = {
   Home: undefined;
@@ -39,8 +40,8 @@ const screenOptions = ({
     // 아이콘 미출력 시 물음표 아이콘 출력
     return <FontAwesome5 name="question-circle" size={size} color={color} />;
   },
-  tabBarActiveTintColor: "#313131",
-  tabBarInactiveTintColor: "#e1e1e1",
+  tabBarActiveTintColor: defaultColor.tabActive,
+  tabBarInactiveTintColor: defaultColor.tabInactive,
 });
 
 export default function BottomTabNavigation() {

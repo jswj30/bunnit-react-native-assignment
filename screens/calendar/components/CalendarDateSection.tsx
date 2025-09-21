@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import { returnIsToday } from "../../../modules/commonModules";
+import { defaultColor } from "../../../modules/defaultColor";
 
 export default function CalendarDateSection({
   PADDING,
@@ -57,7 +58,7 @@ export default function CalendarDateSection({
                     style={[
                       styles.dateText,
                       date.getMonth() !== selectedMonth.getMonth() && {
-                        color: "#E7E7E7",
+                        color: defaultColor.lightGray,
                       },
                       returnIsToday(new Date(), date) && styles.todayText,
                     ]}
@@ -84,20 +85,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dateText: {
-    color: "#5D5D5D",
+    color: defaultColor.darkGray,
     fontSize: 16,
   },
   selected: {
     width: 30,
     height: 30,
     borderWidth: 1,
-    borderColor: "#4A739A",
+    borderColor: defaultColor.navy,
     borderRadius: 18,
     justifyContent: "center",
     alignItems: "center",
   },
   todayText: {
-    color: "#374245",
+    color: defaultColor.charcoal,
     fontWeight: 700,
   },
 });
