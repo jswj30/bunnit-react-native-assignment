@@ -82,7 +82,7 @@ export default function RecordSection() {
 const styles = StyleSheet.create({
   container: {
     borderTopWidth: 1,
-    borderColor: defaultColor.lavender,
+    borderTopColor: defaultColor.lavender,
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: PADDING,
