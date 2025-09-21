@@ -1,21 +1,24 @@
 import React from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, View } from "react-native";
 import CustomSafeAreaView from "../../components/CustomSafeAreaView";
 import CalendarSection from "./components/CalendarSection";
+import RecordSection from "./components/RecordSection";
 
 export default function CalendarScreen() {
   return (
     <CustomSafeAreaView>
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         {/* 달력 */}
         <CalendarSection />
-      </ScrollView>
+        {/* 기록 */}
+        <RecordSection />
+      </View>
     </CustomSafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
+    height: "100%",
   },
 });

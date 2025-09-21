@@ -2,6 +2,7 @@ export const defaultColor = {
   black: "#191919",
   white: "#ffffff",
   gray: "#C6C8CB",
+  gray1: "#9A9EAA",
   lightGray: "#E7E7E7",
   darkGray: "#5D5D5D",
   teal: "#29B5BF",
@@ -11,4 +12,6 @@ export const defaultColor = {
   charcoal: "#374245",
   tabActive: "#313131",
   tabInactive: "#e1e1e1",
+  lightPurple: "#F0F0FF",
+  lavender: "#E8E8FF",
 };

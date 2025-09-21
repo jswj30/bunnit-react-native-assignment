@@ -60,6 +60,7 @@ export default function CalendarSection() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    marginTop: 30,
+    paddingVertical: 30,
+    paddingHorizontal: 10,
   },
 });
