@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { Dispatch, memo, SetStateAction, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { useDateList } from "../../../hooks/useDateList";
 import CalendarHeadSection from "./CalendarHeadSection";
@@ -8,7 +8,11 @@ import CalendarDateSection from "./CalendarDateSection";
 const HEIGHT = 46;
 const PADDING = 20;
 
-export default memo(function CalendarSection() {
+export default memo(function CalendarSection({
+  setCalendarHeight,
+}: {
+  setCalendarHeight: Dispatch<SetStateAction<number>>;
+}) {
   const {
     selectedMonth,
     setSelectedMonth,
@@ -33,8 +37,13 @@ export default memo(function CalendarSection() {
     });
   }, []);
 
+  const handleLayout = useCallback((e) => {
+    const { height } = e.nativeEvent.layout;
+    setCalendarHeight(height);
+  }, []);
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={handleLayout}>
       {/* Year, Month, Icon */}
       <CalendarHeadSection
         PADDING={PADDING}
