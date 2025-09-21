@@ -24,12 +24,10 @@ const MONTH_LIST = [
 ];
 
 export default function CalendarHeadSection({
-  PADDING,
   HEIGHT,
   selectedMonth,
   onPressArrowIcon,
 }: {
-  PADDING: number;
   HEIGHT: number;
   selectedMonth: Date;
   onPressArrowIcon: (type: "prev" | "next") => void;
@@ -39,10 +37,7 @@ export default function CalendarHeadSection({
   return (
     <View style={styles.container}>
       <Pressable
-        style={[
-          styles.arrowIcon,
-          { width: (width - PADDING) / 7, height: HEIGHT },
-        ]}
+        style={[styles.arrowIcon, { width: width / 7, height: HEIGHT }]}
         onPress={() => onPressArrowIcon("prev")}
       >
         <Entypo name="chevron-small-left" size={30} color={defaultColor.teal} />
@@ -55,10 +50,7 @@ export default function CalendarHeadSection({
       </Text>
 
       <Pressable
-        style={[
-          styles.arrowIcon,
-          { width: (width - PADDING) / 7, height: HEIGHT },
-        ]}
+        style={[styles.arrowIcon, { width: width / 7, height: HEIGHT }]}
         onPress={() => onPressArrowIcon("next")}
       >
         <Entypo

@@ -10,14 +10,12 @@ import { returnIsToday } from "../../../modules/commonModules";
 import { defaultColor } from "../../../modules/defaultColor";
 
 export default function CalendarDateSection({
-  PADDING,
   HEIGHT,
   selectedMonth,
   dateList,
   selectedDate,
   setSelectedDate,
 }: {
-  PADDING: number;
   HEIGHT: number;
   selectedMonth: Date;
   dateList: Date[][];
@@ -41,7 +39,7 @@ export default function CalendarDateSection({
                 style={[
                   styles.date,
                   {
-                    width: (width - PADDING) / 7,
+                    width: width / 7,
                     height: HEIGHT,
                   },
                 ]}

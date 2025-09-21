@@ -3,13 +3,7 @@ import { defaultColor } from "../../../modules/defaultColor";
 
 const WEEK_LIST = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export default function CalendarWeekSection({
-  PADDING,
-  HEIGHT,
-}: {
-  PADDING: number;
-  HEIGHT: number;
-}) {
+export default function CalendarWeekSection({ HEIGHT }: { HEIGHT: number }) {
   const { width } = useWindowDimensions();
 
   return (
@@ -17,10 +11,7 @@ export default function CalendarWeekSection({
       {WEEK_LIST.map((week) => (
         <View
           key={week}
-          style={[
-            styles.week,
-            { width: (width - PADDING) / 7, height: HEIGHT },
-          ]}
+          style={[styles.week, { width: width / 7, height: HEIGHT }]}
         >
           <Text
             style={[

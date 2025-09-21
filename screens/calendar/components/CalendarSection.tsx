@@ -6,7 +6,6 @@ import CalendarWeekSection from "./CalendarWeekSection";
 import CalendarDateSection from "./CalendarDateSection";
 
 const HEIGHT = 46;
-const PADDING = 20;
 
 export default memo(function CalendarSection({
   setCalendarHeight,
@@ -46,16 +45,14 @@ export default memo(function CalendarSection({
     <View style={styles.container} onLayout={handleLayout}>
       {/* Year, Month, Icon */}
       <CalendarHeadSection
-        PADDING={PADDING}
         HEIGHT={HEIGHT}
         selectedMonth={selectedMonth}
         onPressArrowIcon={onPressArrowIcon}
       />
       {/* Week text */}
-      <CalendarWeekSection PADDING={PADDING} HEIGHT={HEIGHT} />
+      <CalendarWeekSection HEIGHT={HEIGHT} />
       {/* Dates */}
       <CalendarDateSection
-        PADDING={PADDING}
         HEIGHT={HEIGHT}
         selectedMonth={selectedMonth}
         dateList={dateList}
@@ -70,6 +67,5 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     paddingVertical: 30,
-    paddingHorizontal: 10,
   },
 });
