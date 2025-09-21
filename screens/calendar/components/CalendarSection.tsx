@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { useDateList } from "../../../hooks/useDateList";
 import CalendarHeadSection from "./CalendarHeadSection";
@@ -8,7 +8,7 @@ import CalendarDateSection from "./CalendarDateSection";
 const HEIGHT = 46;
 const PADDING = 20;
 
-export default function CalendarSection() {
+export default memo(function CalendarSection() {
   const {
     selectedMonth,
     setSelectedMonth,
@@ -55,7 +55,7 @@ export default function CalendarSection() {
       />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

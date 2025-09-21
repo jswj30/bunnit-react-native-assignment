@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -12,7 +12,7 @@ import { defaultColor } from "../../../modules/defaultColor";
 const PADDING = 30;
 const BORDER_WIDTH = 3;
 
-export default function RecordSection() {
+export default memo(function RecordSection() {
   const [headList, setHeadList] = useState<RecordHeadListType[]>([
     {
       title: "식단",
@@ -77,7 +77,7 @@ export default function RecordSection() {
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
