@@ -1,30 +1,29 @@
-import { useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 export const useDateList = () => {
-  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [dateList, setDateList] = useState<Date[][]>([]);
+  const [currentDateList, setCurrentDateList] = useState<Date[][]>([]);
+  const [prevDateList, setPrevDateList] = useState<Date[][]>([]);
+  const [nextDateList, setNextDateList] = useState<Date[][]>([]);
 
-  // 선택한 월(selectedMonth)의 전체 일 가져오기
-  useFocusEffect(
-    useCallback(() => {
+  const prevMonth = new Date(currentMonth);
+  prevMonth.setMonth(prevMonth.getMonth() - 1);
+
+  const nextMonth = new Date(currentMonth);
+  nextMonth.setMonth(nextMonth.getMonth() + 1);
+
+  const getDateList = useCallback(
+    (setState: Dispatch<SetStateAction<Date[][]>>, month: Date) => {
       // 달력 일 전체 모음 배열
       const _dateList = [];
 
       // 월 첫날
-      const firstDate = new Date(
-        selectedMonth.getFullYear(),
-        selectedMonth.getMonth(),
-        1
-      );
+      const firstDate = new Date(month.getFullYear(), month.getMonth(), 1);
 
       // 월 마지막 날
-      const lastDate = new Date(
-        selectedMonth.getFullYear(),
-        selectedMonth.getMonth() + 1,
-        0
-      );
+      const lastDate = new Date(month.getFullYear(), month.getMonth() + 1, 0);
 
       // 달력에 출력되는 첫번째 날
       if (firstDate.getDay() !== 0) {
@@ -59,15 +58,29 @@ export const useDateList = () => {
         _dateList.push(oneWeek);
       }
 
-      setDateList(_dateList);
-    }, [selectedMonth])
+      setState(_dateList);
+    },
+    []
+  );
+
+  // 선택한 월(selectedMonth)의 전체 일 가져오기
+  useFocusEffect(
+    useCallback(() => {
+      getDateList(setCurrentDateList, currentMonth);
+      getDateList(setPrevDateList, prevMonth);
+      getDateList(setNextDateList, nextMonth);
+    }, [currentMonth])
   );
 
   return {
-    selectedMonth,
-    setSelectedMonth,
+    currentMonth,
+    prevMonth,
+    nextMonth,
+    setCurrentMonth,
     selectedDate,
     setSelectedDate,
-    dateList,
+    currentDateList,
+    prevDateList,
+    nextDateList,
   };
 };

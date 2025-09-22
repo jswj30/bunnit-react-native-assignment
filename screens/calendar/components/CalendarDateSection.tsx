@@ -11,14 +11,22 @@ import { defaultColor } from "../../../modules/defaultColor";
 
 export default function CalendarDateSection({
   HEIGHT,
-  selectedMonth,
-  dateList,
+  currentMonth,
+  prevMonth,
+  nextMonth,
+  currentDateList,
+  prevDateList,
+  nextDateList,
   selectedDate,
   setSelectedDate,
 }: {
   HEIGHT: number;
-  selectedMonth: Date;
-  dateList: Date[][];
+  currentMonth: Date;
+  prevMonth: Date;
+  nextMonth: Date;
+  currentDateList: Date[][];
+  prevDateList: Date[][];
+  nextDateList: Date[][];
   selectedDate: Date | null;
   setSelectedDate: Dispatch<SetStateAction<Date | null>>;
 }) {
@@ -28,7 +36,13 @@ export default function CalendarDateSection({
     setSelectedDate(date);
   }, []);
 
-  return (
+  const CalendarComponent = ({
+    dateList,
+    month,
+  }: {
+    dateList: Date[][];
+    month: Date;
+  }) => (
     <View>
       {dateList.map((list, index) => {
         return (
@@ -55,7 +69,7 @@ export default function CalendarDateSection({
                   <Text
                     style={[
                       styles.dateText,
-                      date.getMonth() !== selectedMonth.getMonth() && {
+                      date.getMonth() !== month.getMonth() && {
                         color: defaultColor.lightGray,
                       },
                       returnIsToday(new Date(), date) && styles.todayText,
@@ -71,9 +85,21 @@ export default function CalendarDateSection({
       })}
     </View>
   );
+
+  return (
+    <View style={styles.container}>
+      <CalendarComponent dateList={prevDateList} month={prevMonth} />
+      <CalendarComponent dateList={currentDateList} month={currentMonth} />
+      <CalendarComponent dateList={nextDateList} month={nextMonth} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
   dateSection: {
     flexDirection: "row",
   },

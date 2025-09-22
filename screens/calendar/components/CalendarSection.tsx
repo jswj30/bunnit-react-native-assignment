@@ -13,15 +13,19 @@ export default memo(function CalendarSection({
   setCalendarHeight: Dispatch<SetStateAction<number>>;
 }) {
   const {
-    selectedMonth,
-    setSelectedMonth,
+    currentMonth,
+    prevMonth,
+    nextMonth,
+    setCurrentMonth,
     selectedDate,
     setSelectedDate,
-    dateList,
+    currentDateList,
+    prevDateList,
+    nextDateList,
   } = useDateList();
 
   const onPressArrowIcon = useCallback((type: "prev" | "next") => {
-    setSelectedMonth((prev) => {
+    setCurrentMonth((prev) => {
       const newMonth = new Date(prev);
 
       if (type === "prev") {
@@ -46,7 +50,7 @@ export default memo(function CalendarSection({
       {/* Year, Month, Icon */}
       <CalendarHeadSection
         HEIGHT={HEIGHT}
-        selectedMonth={selectedMonth}
+        currentMonth={currentMonth}
         onPressArrowIcon={onPressArrowIcon}
       />
       {/* Week text */}
@@ -54,8 +58,12 @@ export default memo(function CalendarSection({
       {/* Dates */}
       <CalendarDateSection
         HEIGHT={HEIGHT}
-        selectedMonth={selectedMonth}
-        dateList={dateList}
+        currentMonth={currentMonth}
+        prevMonth={prevMonth}
+        nextMonth={nextMonth}
+        currentDateList={currentDateList}
+        prevDateList={prevDateList}
+        nextDateList={nextDateList}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />

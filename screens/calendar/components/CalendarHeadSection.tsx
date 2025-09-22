@@ -25,11 +25,11 @@ const MONTH_LIST = [
 
 export default function CalendarHeadSection({
   HEIGHT,
-  selectedMonth,
+  currentMonth,
   onPressArrowIcon,
 }: {
   HEIGHT: number;
-  selectedMonth: Date;
+  currentMonth: Date;
   onPressArrowIcon: (type: "prev" | "next") => void;
 }) {
   const { width } = useWindowDimensions();
@@ -44,9 +44,7 @@ export default function CalendarHeadSection({
       </Pressable>
 
       <Text style={styles.yearAndMonth}>
-        {`${
-          MONTH_LIST[selectedMonth.getMonth()]
-        } ${selectedMonth.getFullYear()}`}
+        {`${MONTH_LIST[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`}
       </Text>
 
       <Pressable
