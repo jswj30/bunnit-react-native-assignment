@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { returnIsToday } from "../../../modules/commonModules";
 import { defaultColor } from "../../../modules/defaultColor";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 export default function CalendarDateSection({
   HEIGHT,
@@ -19,6 +20,8 @@ export default function CalendarDateSection({
   nextDateList,
   selectedDate,
   setSelectedDate,
+  RecordHeight,
+  defaultValue,
 }: {
   HEIGHT: number;
   currentMonth: Date;
@@ -29,6 +32,8 @@ export default function CalendarDateSection({
   nextDateList: Date[][];
   selectedDate: Date | null;
   setSelectedDate: Dispatch<SetStateAction<Date | null>>;
+  RecordHeight: Animated.SharedValue<number>;
+  defaultValue: number;
 }) {
   const { width } = useWindowDimensions();
 
@@ -36,14 +41,49 @@ export default function CalendarDateSection({
     setSelectedDate(date);
   }, []);
 
+  const animatedStyle = useAnimatedStyle(() => {
+    const changedValue = defaultValue - RecordHeight.value;
+    const dateHeight = HEIGHT * (currentDateList.length - 1) + 30;
+
+    return {
+      transform: [
+        {
+          translateY: changedValue / ((currentDateList.length - 0.35) / 2),
+        },
+      ],
+      opacity: (changedValue + dateHeight) / dateHeight,
+    };
+  });
+
   const CalendarComponent = ({
     dateList,
     month,
+    isPrev,
+    isNext,
   }: {
     dateList: Date[][];
     month: Date;
+    isPrev?: boolean;
+    isNext?: boolean;
   }) => (
-    <View>
+    <Animated.View
+      style={[
+        {
+          backgroundColor: defaultColor.white,
+        },
+        isPrev && {
+          position: "absolute",
+          top: 0,
+          left: -width,
+        },
+        isNext && {
+          position: "absolute",
+          top: 0,
+          right: -width,
+        },
+        animatedStyle,
+      ]}
+    >
       {dateList.map((list, index) => {
         return (
           <View key={`list-${index}`} style={styles.dateSection}>
@@ -83,22 +123,22 @@ export default function CalendarDateSection({
           </View>
         );
       })}
-    </View>
+    </Animated.View>
   );
 
   return (
     <View style={styles.container}>
-      <CalendarComponent dateList={prevDateList} month={prevMonth} />
+      <CalendarComponent dateList={prevDateList} month={prevMonth} isPrev />
       <CalendarComponent dateList={currentDateList} month={currentMonth} />
-      <CalendarComponent dateList={nextDateList} month={nextMonth} />
+      <CalendarComponent dateList={nextDateList} month={nextMonth} isNext />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: "center",
+    position: "relative",
+    backgroundColor: defaultColor.white,
   },
   dateSection: {
     flexDirection: "row",

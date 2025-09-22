@@ -1,19 +1,8 @@
 import { memo, useCallback, useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { RecordHeadListType } from "../../../types/typeList";
 import { defaultColor } from "../../../modules/defaultColor";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 const PADDING = 30;
@@ -22,8 +11,16 @@ const CALENDAR_MARGIN = 168;
 
 export default memo(function RecordSection({
   calendarHeight,
+  RecordHeight,
+  startHeight,
+  defaultValue,
+  width,
 }: {
   calendarHeight: number;
+  RecordHeight: Animated.SharedValue<number>;
+  startHeight: Animated.SharedValue<number>;
+  defaultValue: number;
+  width: number;
 }) {
   const [headList, setHeadList] = useState<RecordHeadListType[]>([
     {
@@ -43,17 +40,10 @@ export default memo(function RecordSection({
     },
   ]);
 
-  const { width, height } = useWindowDimensions();
-  const { top } = useSafeAreaInsets();
-  const tabBarHeight = useBottomTabBarHeight();
   const BUTTON_WIDTH = (width - PADDING * 2 - BORDER_WIDTH * 4) / 3;
 
-  const defaultHeight = height - top - tabBarHeight;
-  const containerHeight = useSharedValue<number>(defaultHeight);
-  const startHeight = useSharedValue<number>(0);
-
   const animatedStyles = useAnimatedStyle(() => ({
-    height: containerHeight.value - calendarHeight,
+    height: RecordHeight.value - calendarHeight,
   }));
 
   const onPressHeadButton = useCallback((index: number) => {
@@ -70,21 +60,20 @@ export default memo(function RecordSection({
 
   const gesture = Gesture.Pan()
     .onStart(() => {
-      startHeight.value = containerHeight.value;
+      startHeight.value = RecordHeight.value;
     })
     .onUpdate((e) => {
       const value = startHeight.value - e.translationY * 1.3;
       // 기본 크기 이상일 때
-      if (defaultHeight <= value) containerHeight.value = value;
+      if (defaultValue <= value) RecordHeight.value = value;
       // 기본 크기 이하일 때
-      if (defaultHeight > value) containerHeight.value = defaultHeight;
+      if (defaultValue > value) RecordHeight.value = defaultValue;
       // 최대 높이까지 올라갔을 때
-      if (defaultHeight - CALENDAR_MARGIN + calendarHeight < value)
-        containerHeight.value =
-          defaultHeight - CALENDAR_MARGIN + calendarHeight;
+      if (defaultValue - CALENDAR_MARGIN + calendarHeight < value)
+        RecordHeight.value = defaultValue - CALENDAR_MARGIN + calendarHeight;
     })
     .onEnd(() => {
-      startHeight.value = containerHeight.value;
+      startHeight.value = RecordHeight.value;
     });
 
   return (

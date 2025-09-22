@@ -66,6 +66,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: defaultColor.white,
+    paddingTop: 30,
+    zIndex: 1,
   },
   yearAndMonth: {
     flex: 1,

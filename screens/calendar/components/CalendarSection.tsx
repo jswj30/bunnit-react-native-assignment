@@ -1,6 +1,7 @@
 import { Dispatch, memo, SetStateAction, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { useDateList } from "../../../hooks/useDateList";
+import Animated from "react-native-reanimated";
 import CalendarHeadSection from "./CalendarHeadSection";
 import CalendarWeekSection from "./CalendarWeekSection";
 import CalendarDateSection from "./CalendarDateSection";
@@ -9,8 +10,12 @@ const HEIGHT = 46;
 
 export default memo(function CalendarSection({
   setCalendarHeight,
+  RecordHeight,
+  defaultValue,
 }: {
   setCalendarHeight: Dispatch<SetStateAction<number>>;
+  RecordHeight: Animated.SharedValue<number>;
+  defaultValue: number;
 }) {
   const {
     currentMonth,
@@ -66,6 +71,8 @@ export default memo(function CalendarSection({
         nextDateList={nextDateList}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
+        RecordHeight={RecordHeight}
+        defaultValue={defaultValue}
       />
     </View>
   );
@@ -74,6 +81,6 @@ export default memo(function CalendarSection({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    paddingVertical: 30,
+    paddingBottom: 30,
   },
 });

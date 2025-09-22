@@ -31,6 +31,8 @@ export default function CalendarWeekSection({ HEIGHT }: { HEIGHT: number }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    backgroundColor: defaultColor.white,
+    zIndex: 1,
   },
   week: {
     width: 30,
