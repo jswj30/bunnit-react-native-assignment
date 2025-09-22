@@ -1,6 +1,7 @@
 import { Dispatch, memo, SetStateAction, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { useDateList } from "../../../hooks/useDateList";
+import { useFocusEffect } from "@react-navigation/native";
 import Animated from "react-native-reanimated";
 import CalendarHeadSection from "./CalendarHeadSection";
 import CalendarWeekSection from "./CalendarWeekSection";
@@ -24,9 +25,14 @@ export default memo(function CalendarSection({
     setCurrentMonth,
     selectedDate,
     setSelectedDate,
-    currentDateList,
-    prevDateList,
-    nextDateList,
+    currentMonthDateList,
+    prevMonthDateList,
+    nextMonthDateList,
+    currentWeekDateList,
+    prevWeekDateList,
+    nextWeekDateList,
+    currentDate,
+    setCurrentDate,
   } = useDateList();
 
   const onPressArrowIcon = useCallback((type: "prev" | "next") => {
@@ -42,6 +48,60 @@ export default memo(function CalendarSection({
       }
 
       return newMonth;
+    });
+  }, []);
+
+  // 주 달력과 월 달력의 월이 불일치 시 적용
+  useFocusEffect(
+    useCallback(() => {
+      if (currentMonth.getMonth() !== currentDate.getMonth()) {
+        const newDate = new Date(currentMonth);
+        setCurrentDate(newDate);
+      }
+    }, [currentMonth])
+  );
+
+  // 주 달력 날짜 출력
+  const setWeekDateList = useCallback((type: "prev" | "next") => {
+    setCurrentDate((prev) => {
+      const prevWeek = new Date(prev);
+      const newWeek = new Date(prev);
+
+      const prevSunday = new Date(prevWeek);
+
+      if (prevSunday.getDay() !== 0) {
+        prevSunday.setDate(prevSunday.getDate() - prevSunday.getDay());
+      }
+
+      if (type === "prev") {
+        newWeek.setDate(newWeek.getDate() - 7);
+
+        const newSunday = new Date(newWeek);
+
+        if (newSunday.getDay() !== 0) {
+          newSunday.setDate(newSunday.getDate() - newSunday.getDay());
+        }
+
+        if (prevSunday.getMonth() !== newSunday.getMonth()) {
+          onPressArrowIcon("prev");
+        }
+      }
+
+      if (type === "next") {
+        newWeek.setDate(newWeek.getDate() + 7);
+
+        const newSunday = new Date(newWeek);
+
+        if (newSunday.getDay() !== 0) {
+          newSunday.setDate(newSunday.getDate() - newSunday.getDay());
+        }
+
+        if (prevSunday.getMonth() !== newSunday.getMonth()) {
+          onPressArrowIcon("next");
+        }
+      }
+
+      return newWeek;
     });
   }, []);
 
@@ -66,14 +126,19 @@ export default memo(function CalendarSection({
         currentMonth={currentMonth}
         prevMonth={prevMonth}
         nextMonth={nextMonth}
-        currentDateList={currentDateList}
-        prevDateList={prevDateList}
-        nextDateList={nextDateList}
+        currentMonthDateList={currentMonthDateList}
+        prevMonthDateList={prevMonthDateList}
+        nextMonthDateList={nextMonthDateList}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
         RecordHeight={RecordHeight}
         defaultValue={defaultValue}
         onPressArrowIcon={onPressArrowIcon}
+        currentWeekDateList={currentWeekDateList}
+        prevWeekDateList={prevWeekDateList}
+        nextWeekDateList={nextWeekDateList}
+        currentDate={currentDate}
+        setWeekDateList={setWeekDateList}
       />
     </View>
   );

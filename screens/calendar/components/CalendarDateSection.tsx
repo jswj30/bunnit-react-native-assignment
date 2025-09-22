@@ -25,39 +25,50 @@ export default function CalendarDateSection({
   currentMonth,
   prevMonth,
   nextMonth,
-  currentDateList,
-  prevDateList,
-  nextDateList,
+  currentMonthDateList,
+  prevMonthDateList,
+  nextMonthDateList,
   selectedDate,
   setSelectedDate,
   RecordHeight,
   defaultValue,
   onPressArrowIcon,
+  currentWeekDateList,
+  prevWeekDateList,
+  nextWeekDateList,
+  currentDate,
+  setWeekDateList,
 }: {
   HEIGHT: number;
   currentMonth: Date;
   prevMonth: Date;
   nextMonth: Date;
-  currentDateList: Date[][];
-  prevDateList: Date[][];
-  nextDateList: Date[][];
+  currentMonthDateList: Date[][];
+  prevMonthDateList: Date[][];
+  nextMonthDateList: Date[][];
   selectedDate: Date | null;
   setSelectedDate: Dispatch<SetStateAction<Date | null>>;
   RecordHeight: Animated.SharedValue<number>;
   defaultValue: number;
   onPressArrowIcon: (type: "prev" | "next") => void;
+  currentWeekDateList: Date[];
+  prevWeekDateList: Date[];
+  nextWeekDateList: Date[];
+  currentDate: Date;
+  setWeekDateList: (type: "prev" | "next") => void;
 }) {
   const { width } = useWindowDimensions();
 
-  const snap = useSharedValue<number>(0);
+  const monthSnap = useSharedValue<number>(0);
+  const weekSnap = useSharedValue<number>(0);
 
   const findDateIndex = useCallback(() => {
-    const today = new Date();
-    const findDate = `${today.getFullYear()}-${
-      today.getMonth() + 1
-    }-${today.getDate()}`;
+    // const today = new Date();
+    const findDate = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() + 1
+    }-${currentDate.getDate()}`;
 
-    const dateList = currentDateList.map((list) => {
+    const dateList = currentMonthDateList.map((list) => {
       return list.map(
         (date) =>
           `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
@@ -73,21 +84,22 @@ export default function CalendarDateSection({
     });
 
     return index;
-  }, [currentDateList]);
-
-  useFocusEffect(
-    useCallback(() => {
-      findDateIndex();
-    }, [selectedDate])
-  );
+  }, [currentDate, currentMonthDateList]);
 
   const weekIndex = findDateIndex();
 
-  // 월이 변경되면 snap 값을 리셋
+  // 월이 변경되면 monthSnap 값을 리셋
   useFocusEffect(
     useCallback(() => {
-      snap.value = 0;
+      monthSnap.value = 0;
     }, [currentMonth])
+  );
+
+  // 주가 변경되면 weekSnap 값을 리셋
+  useFocusEffect(
+    useCallback(() => {
+      weekSnap.value = 0;
+    }, [currentDate])
   );
 
   // 날짜 선택 함수
@@ -98,13 +110,13 @@ export default function CalendarDateSection({
   // 월 달력 상/하 애니메이션
   const calendarAnimatedStyle = useAnimatedStyle(() => {
     const changedValue = defaultValue - RecordHeight.value;
-    const dateHeight = HEIGHT * (currentDateList.length - 1) + 30;
+    const dateHeight = HEIGHT * (currentMonthDateList.length - 1) + 30;
 
     return {
       transform: [
         {
           translateY:
-            changedValue / ((currentDateList.length - 0.35) / weekIndex),
+            changedValue / ((currentMonthDateList.length - 0.35) / weekIndex),
         },
       ],
       opacity: (changedValue + dateHeight) / dateHeight,
@@ -114,25 +126,36 @@ export default function CalendarDateSection({
   // 주 달력 상/하 애니메이션
   const weekAnimatedStyle = useAnimatedStyle(() => {
     const changedValue = defaultValue - RecordHeight.value;
-    const dateHeight = HEIGHT * (currentDateList.length - 1) + 30;
+    const dateHeight = HEIGHT * (currentMonthDateList.length - 1) + 30;
 
     return {
       transform: [
         {
           translateY:
-            changedValue / ((currentDateList.length - 0.35) / weekIndex),
+            changedValue / ((currentMonthDateList.length - 0.35) / weekIndex),
         },
       ],
       opacity: 1 - (changedValue + dateHeight) / dateHeight,
     };
   });
 
-  // 달력 스냅 애니메이션
-  const snapStyle = useAnimatedStyle(() => {
+  // 월 달력 스냅 애니메이션
+  const monthSnapStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateX: snap.value,
+          translateX: monthSnap.value,
+        },
+      ],
+    };
+  });
+
+  // 주 달력 스냅 애니메이션
+  const weekSnapStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: weekSnap.value,
         },
       ],
     };
@@ -172,7 +195,15 @@ export default function CalendarDateSection({
   );
 
   // 주 달력 컴포넌트
-  const WeekComponent = () => {
+  const WeekComponent = ({
+    dateList,
+    isPrev,
+    isNext,
+  }: {
+    dateList: Date[];
+    isPrev?: boolean;
+    isNext?: boolean;
+  }) => {
     return (
       <Animated.View
         style={[
@@ -182,13 +213,19 @@ export default function CalendarDateSection({
             position: "absolute",
             top: HEIGHT * weekIndex,
             left: 0,
-            zIndex: 1,
-            width,
+            zIndex: 10,
+            width: width,
+          },
+          isPrev && {
+            left: -width,
+          },
+          isNext && {
+            left: width,
           },
           weekAnimatedStyle,
         ]}
       >
-        {currentDateList[weekIndex]?.map((date, j) => (
+        {dateList.map((date, j) => (
           <DateComponent date={date} month={currentMonth} key={`date-${j}`} />
         ))}
       </Animated.View>
@@ -240,10 +277,10 @@ export default function CalendarDateSection({
     </>
   );
 
-  // 달력 스냅 제스쳐
-  const gesture = Gesture.Pan()
+  // 월 달력 스냅 제스쳐
+  const monthGesture = Gesture.Pan()
     .onUpdate((e) => {
-      snap.value = e.translationX;
+      monthSnap.value = e.translationX;
     })
     .onEnd((e) => {
       const { translationX, velocityX } = e;
@@ -255,29 +292,77 @@ export default function CalendarDateSection({
       ) {
         // +: prev, -: next
         if (translationX > 0) {
-          snap.value = withSpring(width, {}, () => {
+          monthSnap.value = withSpring(width, {}, () => {
             runOnJS(onPressArrowIcon)("prev");
           });
         }
 
         if (translationX <= 0) {
-          snap.value = withSpring(-width, {}, () => {
+          monthSnap.value = withSpring(-width, {}, () => {
             runOnJS(onPressArrowIcon)("next");
           });
         }
       } else {
-        snap.value = withSpring(0);
+        monthSnap.value = withSpring(0);
+      }
+    });
+
+  // 주 달력 스냅 제스쳐
+  const weekGesture = Gesture.Pan()
+    .onUpdate((e) => {
+      weekSnap.value = e.translationX;
+    })
+    .onEnd((e) => {
+      const { translationX, velocityX } = e;
+
+      // snap 기준
+      if (
+        Math.abs(translationX) > MIN_SNAP ||
+        Math.abs(velocityX) > MIN_VELOCITY
+      ) {
+        // +: prev, -: next
+        if (translationX > 0) {
+          weekSnap.value = withSpring(width, {}, () => {
+            runOnJS(setWeekDateList)("prev");
+          });
+        }
+
+        if (translationX <= 0) {
+          weekSnap.value = withSpring(-width, {}, () => {
+            runOnJS(setWeekDateList)("next");
+          });
+        }
+      } else {
+        weekSnap.value = withSpring(0);
       }
     });
 
   return (
     <View style={styles.container}>
-      <WeekComponent />
-      <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.container, snapStyle]}>
-          <CalendarComponent dateList={prevDateList} month={prevMonth} isPrev />
-          <CalendarComponent dateList={currentDateList} month={currentMonth} />
-          <CalendarComponent dateList={nextDateList} month={nextMonth} isNext />
+      <GestureDetector gesture={weekGesture}>
+        <Animated.View style={[styles.weekContainer, weekSnapStyle]}>
+          <WeekComponent dateList={prevWeekDateList} isPrev />
+          <WeekComponent dateList={currentWeekDateList} />
+          <WeekComponent dateList={nextWeekDateList} isNext />
+        </Animated.View>
+      </GestureDetector>
+
+      <GestureDetector gesture={monthGesture}>
+        <Animated.View style={[styles.container, monthSnapStyle]}>
+          <CalendarComponent
+            dateList={prevMonthDateList}
+            month={prevMonth}
+            isPrev
+          />
+          <CalendarComponent
+            dateList={currentMonthDateList}
+            month={currentMonth}
+          />
+          <CalendarComponent
+            dateList={nextMonthDateList}
+            month={nextMonth}
+            isNext
+          />
         </Animated.View>
       </GestureDetector>
     </View>
@@ -285,6 +370,11 @@ export default function CalendarDateSection({
 }
 
 const styles = StyleSheet.create({
+  weekContainer: {
+    position: "relative",
+    backgroundColor: defaultColor.white,
+    zIndex: 1,
+  },
   container: {
     position: "relative",
     backgroundColor: defaultColor.white,
