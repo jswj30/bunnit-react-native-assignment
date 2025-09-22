@@ -73,6 +73,7 @@ export default memo(function CalendarSection({
         setSelectedDate={setSelectedDate}
         RecordHeight={RecordHeight}
         defaultValue={defaultValue}
+        onPressArrowIcon={onPressArrowIcon}
       />
     </View>
   );
